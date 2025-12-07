@@ -17,7 +17,13 @@ struct syntaxTool: ParsableCommand {
     mutating func run() throws {
         let source = try String(contentsOfFile: filePath, encoding: .utf8)
         let tree = Parser.parse(source: source)
-        let visitor = FullVisitor(viewMode: .fixedUp)
+        let visitor = FullVisitor(viewMode: .sourceAccurate)
         visitor.walk(tree)
+        
+        //Graphs
+        let gHvisitor = GraphBuilderVisitor(viewMode: .sourceAccurate)
+        gHvisitor.walk(tree)
+        
+        print(gHvisitor.functions)
     }
 }
